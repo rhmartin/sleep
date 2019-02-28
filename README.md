@@ -13,7 +13,7 @@ This firmware is for use on the embedded controllers for the SSB sleep monitorin
 This file should be flashed onto the Arduino.
 ## ```NodeMCU_Code_Reg6.ino``` 
 This file should be flashed onto the NodeMCU.
-The WiFi used to transmit the data from the NodeMCU to the Firebase is hardcoded in the NodeMCU code as the macro ```WIFI_SSID``` and the WiFi password is defined as the macro ```WIFI_PASSWORD```. These should be overwritten with the proper WiFi.
+In order to connect to an individual's WPA2 protected WiFi, one must first connect to the WiFi ESPXXX and then use the portal that appears to select their WiFi.
 The Firebase desired for storing data is also hardcoded in the file under the macro ```FIREBASE_HOST``` and ```FIREBASE_AUTH```. In order to use the device properly, the host should be the URL of the database with the https:// removed and the trailing / removed. The authorization key is the "secret" found in Settings->Project Settings->Service Accounts->Database Secrets.
 
 # Associated Application
