@@ -20,8 +20,8 @@ int fsrReading2;     // the analog reading from the FSR resistor divider
 int fsrVoltage2;     // the analog reading converted to voltage
 unsigned long fsrResistance2;  // The voltage converted to resistance, can be very big so make "long"
 
-unsigned long threshold = 10000; // initial threshold before calibration
-int fsrOut = 2;   // the pin the will indicate to the nodemcu of whether someone is on the bed or not
+unsigned long threshold = 0; // initial threshold before calibration
+int fsrOut = 6;   // the pin the will indicate to the nodemcu of whether someone is on the bed or not
 int calPin = 10;  // pin that reads a signal from the nodemcu to put the arduino in a calibration state
 //END FSR SETUP
 
@@ -104,7 +104,7 @@ void loop(void) {
     //The voltage = Vcc * R / (R + FSR) where R = 10K and Vcc = 5V
     //so FSR = ((Vcc - V) * R) / V        yay math!
     fsrResistance = 5000 - fsrVoltage;     //fsrVoltage is in millivolts so 5V = 5000mV
-    fsrResistance *= 11230;                //11230 ohm resistor
+    fsrResistance *= 10220;                //11230 ohm resistor
     fsrResistance /= fsrVoltage;
     Serial.print("FSR resistance1 in ohms = ");
     Serial.println(fsrResistance);
@@ -119,7 +119,7 @@ void loop(void) {
 
   } else {
     fsrResistance2 = 5000 - fsrVoltage2;     //fsrVoltage is in millivolts so 5V = 5000mV
-    fsrResistance2 *= 111230;                //11230 ohm resistor
+    fsrResistance2 *= 10220;                //11230 ohm resistor
     fsrResistance2 /= fsrVoltage2;
     Serial.print("FSR resistance2 in ohms = ");
     Serial.println(fsrResistance2);
@@ -127,10 +127,10 @@ void loop(void) {
 
   //calibration
   //takes the worst case scenario and scales it down to be able to detect presence of a child
-    if(digitalRead(10) == HIGH){
-      threshold = min(fsrResistance,fsrResistance2) * .85; 
+    if(digitalRead(calPin) == HIGH){
+      threshold = min(fsrResistance,fsrResistance2) * .7; 
       Serial.print("New threshold: ");
-      Serial.println(min(fsrResistance,fsrResistance2)*.85);
+      Serial.println(min(fsrResistance,fsrResistance2)*.7);
       delay(200);
     }
     
@@ -191,7 +191,7 @@ void loop(void) {
   
   //calculate magnitude of the acceleration
   float mag = sqrt((mx * mx) + (my * my) + (mz * mz));
-  mag -= 3000; //subtract gravity
+  mag -= 3100; //subtract gravity
   mag = abs(mag); //make sure no negatives
   Serial.println("mag =" + String(mag));
   
